@@ -21,12 +21,12 @@ class Adaptive:
         -- Initial state (density matrix).
 
     > **savefile:** `bool`
-        -- Whether or not to save all the posterior distributions.  
-        If set `True` then three files "pout.npy", "xout.npy" and "y.npy" will be 
+        -- Whether or not to save all the posterior distributions.
+        If set `True` then three files "pout.npy", "xout.npy" and "y.npy" will be
         generated including the posterior distributions, the estimated values, and
-        the experimental results in the iterations. If set `False` the posterior 
-        distribution in the final iteration, the estimated values and the experimental 
-        results in all iterations will be saved in "pout.npy", "xout.npy" and "y.npy". 
+        the experimental results in the iterations. If set `False` the posterior
+        distribution in the final iteration, the estimated values and the experimental
+        results in all iterations will be saved in "pout.npy", "xout.npy" and "y.npy".
 
     > **max_episode:** `int`
         -- The number of episodes.
@@ -95,7 +95,7 @@ class Adaptive:
 
     def Kraus(self, K, dK):
         r"""
-        Dynamics of the density matrix of the form 
+        Dynamics of the density matrix of the form
         \begin{align}
         \rho=\sum_i K_i\rho_0K_i^{\dagger}
         \end{align}
@@ -108,7 +108,7 @@ class Adaptive:
             -- Kraus operator(s) with respect to the values in x.
 
         > **dK:** `multidimensional list`
-            -- Derivatives of the Kraus operator(s) with respect to the unknown parameters 
+            -- Derivatives of the Kraus operator(s) with respect to the unknown parameters
             to be estimated.
         """
 
@@ -119,8 +119,8 @@ class Adaptive:
 
     def CFIM(self, M=[], W=[]):
         r"""
-        Choose CFI or $\mathrm{Tr}(WI^{-1})$ as the objective function. 
-        In single parameter estimation the objective function is CFI and 
+        Choose CFI or $\mathrm{Tr}(WI^{-1})$ as the objective function.
+        In single parameter estimation the objective function is CFI and
         in multiparameter estimation it will be $\mathrm{Tr}(WI^{-1})$.
 
         Parameters
@@ -129,11 +129,11 @@ class Adaptive:
             -- Weight matrix.
 
         > **M:** `list of matrices`
-            -- A set of positive operator-valued measure (POVM). The default measurement 
+            -- A set of positive operator-valued measure (POVM). The default measurement
             is a set of rank-one symmetric informationally complete POVM (SIC-POVM).
 
-        **Note:** 
-            SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state 
+        **Note:**
+            SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state
             which can be downloaded from [here](http://www.physics.umb.edu/Research/QBism/
             solutions.html).
         """
@@ -262,7 +262,10 @@ class Adaptive:
                 F = []
                 for hi in range(len(self.K)):
                     rho_tp = sum(
-                        [np.dot(Ki, np.dot(self.rho0, Ki.conj().T)) for Ki in self.K[hi]]
+                        [
+                            np.dot(Ki, np.dot(self.rho0, Ki.conj().T))
+                            for Ki in self.K[hi]
+                        ]
                     )
                     drho_tp = sum(
                         [
@@ -291,7 +294,10 @@ class Adaptive:
                 F = []
                 for hi in range(len(p_list)):
                     rho_tp = sum(
-                        [np.dot(Ki, np.dot(self.rho0, Ki.conj().T)) for Ki in K_list[hi]]
+                        [
+                            np.dot(Ki, np.dot(self.rho0, Ki.conj().T))
+                            for Ki in K_list[hi]
+                        ]
                     )
                     dK_reshape = [
                         [dK_list[hi][i][j] for i in range(self.k_num)]
@@ -381,22 +387,24 @@ def adaptive_dynamics(
 
                 if (ei + 1) % 50 == 0:
                     if (x_out + u) > x[0][-1] and (x_out + u) < x[0][0]:
-                        raise ValueError("please increase the regime of the parameters.")
+                        raise ValueError(
+                            "please increase the regime of the parameters."
+                        )
 
                 xout.append(x_out)
                 y.append(res_exp)
-            fp = open('pout.csv','a')
-            fp.write('\n')
+            fp = open("pout.csv", "a")
+            fp.write("\n")
             np.savetxt(fp, np.array(p))
             fp.close()
 
-            fx = open('xout.csv','a')
-            fx.write('\n')
+            fx = open("xout.csv", "a")
+            fx.write("\n")
             np.savetxt(fx, np.array(xout))
             fx.close()
 
-            fy = open('y.csv','a')
-            fy.write('\n')
+            fy = open("y.csv", "a")
+            fy.write("\n")
             np.savetxt(fy, np.array(y))
             fy.close()
         else:
@@ -431,20 +439,22 @@ def adaptive_dynamics(
 
                 if (ei + 1) % 50 == 0:
                     if (x_out + u) > x[0][-1] and (x_out + u) < x[0][0]:
-                        raise ValueError("please increase the regime of the parameters.")
+                        raise ValueError(
+                            "please increase the regime of the parameters."
+                        )
 
-                fp = open('pout.csv','a')
-                fp.write('\n')
+                fp = open("pout.csv", "a")
+                fp.write("\n")
                 np.savetxt(fp, [np.array(p)])
                 fp.close()
 
-                fx = open('xout.csv','a')
-                fx.write('\n')
+                fx = open("xout.csv", "a")
+                fx.write("\n")
                 np.savetxt(fx, [x_out])
                 fx.close()
 
-                fy = open('y.csv','a')
-                fy.write('\n')
+                fy = open("y.csv", "a")
+                fy.write("\n")
                 np.savetxt(fy, [res_exp])
                 fy.close()
     else:
@@ -485,7 +495,8 @@ def adaptive_dynamics(
             y, xout = [], []
             for ei in range(max_episode):
                 rho = [
-                    np.zeros((dim, dim), dtype=np.complex128) for i in range(len(p_list))
+                    np.zeros((dim, dim), dtype=np.complex128)
+                    for i in range(len(p_list))
                 ]
                 for hj in range(len(p_list)):
                     idx_list = [
@@ -528,33 +539,34 @@ def adaptive_dynamics(
 
                 if (ei + 1) % 50 == 0:
                     for un in range(para_num):
-                        if (x_out[un] + u[un]) > x[un][-1] and (x_out[un] + u[un]) < x[un][
-                            0
-                        ]:
+                        if (x_out[un] + u[un]) > x[un][-1] and (x_out[un] + u[un]) < x[
+                            un
+                        ][0]:
                             raise ValueError(
                                 "please increase the regime of the parameters."
                             )
                 xout.append(x_out)
                 y.append(res_exp)
 
-            fp = open('pout.csv','a')
-            fp.write('\n')
+            fp = open("pout.csv", "a")
+            fp.write("\n")
             np.savetxt(fp, np.array(p))
             fp.close()
 
-            fx = open('xout.csv','a')
-            fx.write('\n')
+            fx = open("xout.csv", "a")
+            fx.write("\n")
             np.savetxt(fx, np.array(xout))
             fx.close()
 
-            fy = open('y.csv','a')
-            fy.write('\n')
+            fy = open("y.csv", "a")
+            fy.write("\n")
             np.savetxt(fy, np.array(y))
             fy.close()
         else:
             for ei in range(max_episode):
                 rho = [
-                    np.zeros((dim, dim), dtype=np.complex128) for i in range(len(p_list))
+                    np.zeros((dim, dim), dtype=np.complex128)
+                    for i in range(len(p_list))
                 ]
                 for hj in range(len(p_list)):
                     idx_list = [
@@ -597,25 +609,25 @@ def adaptive_dynamics(
 
                 if (ei + 1) % 50 == 0:
                     for un in range(para_num):
-                        if (x_out[un] + u[un]) > x[un][-1] and (x_out[un] + u[un]) < x[un][
-                            0
-                        ]:
+                        if (x_out[un] + u[un]) > x[un][-1] and (x_out[un] + u[un]) < x[
+                            un
+                        ][0]:
                             raise ValueError(
                                 "please increase the regime of the parameters."
                             )
 
-                fp = open('pout.csv','a')
-                fp.write('\n')
+                fp = open("pout.csv", "a")
+                fp.write("\n")
                 np.savetxt(fp, [np.array(p)])
                 fp.close()
 
-                fx = open('xout.csv','a')
-                fx.write('\n')
+                fx = open("xout.csv", "a")
+                fx.write("\n")
                 np.savetxt(fx, [x_out])
                 fx.close()
 
-                fy = open('y.csv','a')
-                fy.write('\n')
+                fy = open("y.csv", "a")
+                fy.write("\n")
                 np.savetxt(fy, [res_exp])
                 fy.close()
 
@@ -655,7 +667,9 @@ def adaptive_Kraus(x, p, M, rho0, K, dK, W, max_episode, eps, savefile):
                 rho = [np.zeros((dim, dim), dtype=np.complex128) for i in range(p_num)]
                 for hj in range(p_num):
                     x_idx = np.argmin(np.abs(x[0] - (x[0][hj] + u)))
-                    rho_tp = sum([np.dot(Ki, np.dot(rho0, Ki.conj().T)) for Ki in K[x_idx]])
+                    rho_tp = sum(
+                        [np.dot(Ki, np.dot(rho0, Ki.conj().T)) for Ki in K[x_idx]]
+                    )
                     rho[hj] = rho_tp
                 print("The tunable parameter is %s" % u)
                 res_exp = input("Please enter the experimental result: ")
@@ -675,22 +689,24 @@ def adaptive_Kraus(x, p, M, rho0, K, dK, W, max_episode, eps, savefile):
 
                 if (ei + 1) % 50 == 0:
                     if (x_out + u) > x[0][-1] and (x_out + u) < x[0][0]:
-                        raise ValueError("please increase the regime of the parameters.")
+                        raise ValueError(
+                            "please increase the regime of the parameters."
+                        )
 
                 xout.append(x_out)
                 y.append(res_exp)
-            fp = open('pout.csv','a')
-            fp.write('\n')
+            fp = open("pout.csv", "a")
+            fp.write("\n")
             np.savetxt(fp, np.array(p))
             fp.close()
 
-            fx = open('xout.csv','a')
-            fx.write('\n')
+            fx = open("xout.csv", "a")
+            fx.write("\n")
             np.savetxt(fx, np.array(xout))
             fx.close()
 
-            fy = open('y.csv','a')
-            fy.write('\n')
+            fy = open("y.csv", "a")
+            fy.write("\n")
             np.savetxt(fy, np.array(y))
             fy.close()
         else:
@@ -698,7 +714,9 @@ def adaptive_Kraus(x, p, M, rho0, K, dK, W, max_episode, eps, savefile):
                 rho = [np.zeros((dim, dim), dtype=np.complex128) for i in range(p_num)]
                 for hj in range(p_num):
                     x_idx = np.argmin(np.abs(x[0] - (x[0][hj] + u)))
-                    rho_tp = sum([np.dot(Ki, np.dot(rho0, Ki.conj().T)) for Ki in K[x_idx]])
+                    rho_tp = sum(
+                        [np.dot(Ki, np.dot(rho0, Ki.conj().T)) for Ki in K[x_idx]]
+                    )
                     rho[hj] = rho_tp
                 print("The tunable parameter is %s" % u)
                 res_exp = input("Please enter the experimental result: ")
@@ -718,20 +736,22 @@ def adaptive_Kraus(x, p, M, rho0, K, dK, W, max_episode, eps, savefile):
 
                 if (ei + 1) % 50 == 0:
                     if (x_out + u) > x[0][-1] and (x_out + u) < x[0][0]:
-                        raise ValueError("please increase the regime of the parameters.")
+                        raise ValueError(
+                            "please increase the regime of the parameters."
+                        )
 
-                fp = open('pout.csv','a')
-                fp.write('\n')
+                fp = open("pout.csv", "a")
+                fp.write("\n")
                 np.savetxt(fp, [np.array(p)])
                 fp.close()
 
-                fx = open('xout.csv','a')
-                fx.write('\n')
+                fx = open("xout.csv", "a")
+                fx.write("\n")
                 np.savetxt(fx, [x_out])
                 fx.close()
 
-                fy = open('y.csv','a')
-                fy.write('\n')
+                fy = open("y.csv", "a")
+                fy.write("\n")
                 np.savetxt(fy, [res_exp])
                 fy.close()
     else:
@@ -755,9 +775,8 @@ def adaptive_Kraus(x, p, M, rho0, K, dK, W, max_episode, eps, savefile):
         for hi in range(len(p_list)):
             rho_tp = sum([np.dot(Ki, np.dot(rho0, Ki.conj().T)) for Ki in K_list[hi]])
             dK_reshape = [
-                        [dK_list[hi][i][j] for i in range(k_num)]
-                        for j in range(para_num)
-                    ]
+                [dK_list[hi][i][j] for i in range(k_num)] for j in range(para_num)
+            ]
             drho_tp = [
                 sum(
                     [
@@ -783,7 +802,8 @@ def adaptive_Kraus(x, p, M, rho0, K, dK, W, max_episode, eps, savefile):
             y, xout = [], []
             for ei in range(max_episode):
                 rho = [
-                    np.zeros((dim, dim), dtype=np.complex128) for i in range(len(p_list))
+                    np.zeros((dim, dim), dtype=np.complex128)
+                    for i in range(len(p_list))
                 ]
                 for hj in range(len(p_list)):
                     idx_list = [
@@ -822,32 +842,33 @@ def adaptive_Kraus(x, p, M, rho0, K, dK, W, max_episode, eps, savefile):
 
                 if (ei + 1) % 50 == 0:
                     for un in range(para_num):
-                        if (x_out[un] + u[un]) > x[un][-1] and (x_out[un] + u[un]) < x[un][
-                            0
-                        ]:
+                        if (x_out[un] + u[un]) > x[un][-1] and (x_out[un] + u[un]) < x[
+                            un
+                        ][0]:
                             raise ValueError(
                                 "please increase the regime of the parameters."
                             )
                 xout.append(x_out)
                 y.append(res_exp)
-            fp = open('pout.csv','a')
-            fp.write('\n')
+            fp = open("pout.csv", "a")
+            fp.write("\n")
             np.savetxt(fp, np.array(p))
             fp.close()
 
-            fx = open('xout.csv','a')
-            fx.write('\n')
+            fx = open("xout.csv", "a")
+            fx.write("\n")
             np.savetxt(fx, np.array(xout))
             fx.close()
 
-            fy = open('y.csv','a')
-            fy.write('\n')
+            fy = open("y.csv", "a")
+            fy.write("\n")
             np.savetxt(fy, np.array(y))
             fy.close()
         else:
             for ei in range(max_episode):
                 rho = [
-                    np.zeros((dim, dim), dtype=np.complex128) for i in range(len(p_list))
+                    np.zeros((dim, dim), dtype=np.complex128)
+                    for i in range(len(p_list))
                 ]
                 for hj in range(len(p_list)):
                     idx_list = [
@@ -886,23 +907,23 @@ def adaptive_Kraus(x, p, M, rho0, K, dK, W, max_episode, eps, savefile):
 
                 if (ei + 1) % 50 == 0:
                     for un in range(para_num):
-                        if (x_out[un] + u[un]) > x[un][-1] and (x_out[un] + u[un]) < x[un][
-                            0
-                        ]:
+                        if (x_out[un] + u[un]) > x[un][-1] and (x_out[un] + u[un]) < x[
+                            un
+                        ][0]:
                             raise ValueError(
                                 "please increase the regime of the parameters."
                             )
-                fp = open('pout.csv','a')
-                fp.write('\n')
+                fp = open("pout.csv", "a")
+                fp.write("\n")
                 np.savetxt(fp, [np.array(p)])
                 fp.close()
 
-                fx = open('xout.csv','a')
-                fx.write('\n')
+                fx = open("xout.csv", "a")
+                fx.write("\n")
                 np.savetxt(fx, [x_out])
                 fx.close()
 
-                fy = open('y.csv','a')
-                fy.write('\n')
+                fy = open("y.csv", "a")
+                fy.write("\n")
                 np.savetxt(fy, [res_exp])
                 fy.close()

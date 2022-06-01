@@ -3,27 +3,26 @@ import numpy as np
 import random
 
 # initial state
-rho0 = 0.5 * np.array([[1., 1.], [1., 1.]])
+rho0 = 0.5 * np.array([[1.0, 1.0], [1.0, 1.0]])
 # free Hamiltonian
 B, omega0 = 0.5 * np.pi, 1.0
-sx = np.array([[0., 1.], [1., 0.]])
-sy = np.array([[0., -1.j], [1.j, 0.]]) 
-sz = np.array([[1., 0.], [0., -1.]])
-H0_func = lambda x: 0.5*B*omega0*(sx*np.cos(x[0])+sz*np.sin(x[0]))
+sx = np.array([[0.0, 1.0], [1.0, 0.0]])
+sy = np.array([[0.0, -1.0j], [1.0j, 0.0]])
+sz = np.array([[1.0, 0.0], [0.0, -1.0]])
+H0_func = lambda x: 0.5 * B * omega0 * (sx * np.cos(x[0]) + sz * np.sin(x[0]))
 # derivative of free Hamiltonian in x
-dH_func = lambda x: [0.5*B*omega0*(-sx*np.sin(x[0])+sz*np.cos(x[0]))]
+dH_func = lambda x: [0.5 * B * omega0 * (-sx * np.sin(x[0]) + sz * np.cos(x[0]))]
 # measurement
-M1 = 0.5*np.array([[1., 1.], [1., 1.]])
-M2 = 0.5*np.array([[1., -1.], [-1., 1.]])
+M1 = 0.5 * np.array([[1.0, 1.0], [1.0, 1.0]])
+M2 = 0.5 * np.array([[1.0, -1.0], [-1.0, 1.0]])
 M = [M1, M2]
 # time length for the evolution
-tspan = np.linspace(0., 1., 1000)
+tspan = np.linspace(0.0, 1.0, 1000)
 # prior distribution
-x = np.linspace(-0.25*np.pi+0.1, 3.0*np.pi/4.0-0.1, 1000)
-p = (1.0/(x[-1]-x[0]))*np.ones(len(x))
+x = np.linspace(-0.25 * np.pi + 0.1, 3.0 * np.pi / 4.0 - 0.1, 1000)
+p = (1.0 / (x[-1] - x[0])) * np.ones(len(x))
 # dynamics
-rho = [np.zeros((len(rho0), len(rho0)), dtype=np.complex128) for \
-       i in range(len(x))]
+rho = [np.zeros((len(rho0), len(rho0)), dtype=np.complex128) for i in range(len(x))]
 for xi in range(len(x)):
     H_tp = H0_func([x[xi]])
     dH_tp = dH_func([x[xi]])

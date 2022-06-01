@@ -7,12 +7,12 @@ class AD_Compopt(Comp.ComprehensiveSystem):
     Attributes
     ----------
     > **savefile:** `bool`
-        -- Whether or not to save all the optimized variables (probe states, 
-        control coefficients and measurements).  
-        If set `True` then the optimized variables and the values of the 
-        objective function obtained in all episodes will be saved during 
-        the training. If set `False` the optimized variables in the final 
-        episode and the values of the objective function in all episodes 
+        -- Whether or not to save all the optimized variables (probe states,
+        control coefficients and measurements).
+        If set `True` then the optimized variables and the values of the
+        objective function obtained in all episodes will be saved during
+        the training. If set `False` the optimized variables in the final
+        episode and the values of the objective function in all episodes
         will be saved.
 
     > **Adam:** `bool`
@@ -29,7 +29,7 @@ class AD_Compopt(Comp.ComprehensiveSystem):
 
     > **max_episode:** `int`
         -- The number of episodes.
-  
+
     > **epsilon:** `float`
         -- Learning rate.
 
@@ -45,6 +45,7 @@ class AD_Compopt(Comp.ComprehensiveSystem):
     > **eps:** `float`
         -- Machine epsilon.
     """
+
     def __init__(
         self,
         savefile=False,
@@ -83,22 +84,22 @@ class AD_Compopt(Comp.ComprehensiveSystem):
             -- Weight matrix.
 
         > **M:** `list of matrices`
-            -- A set of positive operator-valued measure (POVM). The default measurement 
+            -- A set of positive operator-valued measure (POVM). The default measurement
             is a set of rank-one symmetric informationally complete POVM (SIC-POVM).
 
         > **target:** `string`
-            -- Objective functions for searching the minimum time to reach the given 
-            value of the objective function. Options are:  
-            "QFIM" (default) -- choose QFI (QFIM) as the objective function.  
-            "CFIM" -- choose CFI (CFIM) as the objective function.  
-            "HCRB" -- choose HCRB as the objective function.  
+            -- Objective functions for searching the minimum time to reach the given
+            value of the objective function. Options are:
+            "QFIM" (default) -- choose QFI (QFIM) as the objective function.
+            "CFIM" -- choose CFI (CFIM) as the objective function.
+            "HCRB" -- choose HCRB as the objective function.
 
         > **LDtype:** `string`
-            -- Types of QFI (QFIM) can be set as the objective function. Options are:  
-            "SLD" (default) -- QFI (QFIM) based on symmetric logarithmic derivative (SLD).  
-            "RLD" -- QFI (QFIM) based on right logarithmic derivative (RLD).  
-            "LLD" -- QFI (QFIM) based on left logarithmic derivative (LLD). 
-        
+            -- Types of QFI (QFIM) can be set as the objective function. Options are:
+            "SLD" (default) -- QFI (QFIM) based on symmetric logarithmic derivative (SLD).
+            "RLD" -- QFI (QFIM) based on right logarithmic derivative (RLD).
+            "LLD" -- QFI (QFIM) based on left logarithmic derivative (LLD).
+
         **Note:** AD is only available when target is 'QFIM'.
         """
         if M != []:

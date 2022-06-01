@@ -13,12 +13,12 @@ class ComprehensiveSystem:
     Attributes
     ----------
     > **savefile:** `bool`
-        -- Whether or not to save all the optimized variables (probe states, 
-        control coefficients and measurements).  
-        If set `True` then the optimized variables and the values of the 
-        objective function obtained in all episodes will be saved during 
-        the training. If set `False` the optimized variables in the final 
-        episode and the values of the objective function in all episodes 
+        -- Whether or not to save all the optimized variables (probe states,
+        control coefficients and measurements).
+        If set `True` then the optimized variables and the values of the
+        objective function obtained in all episodes will be saved during
+        the training. If set `False` the optimized variables in the final
+        episode and the values of the objective function in all episodes
         will be saved.
 
     > **psi0:** `list of arrays`
@@ -188,7 +188,8 @@ class ComprehensiveSystem:
                         np.zeros(len(self.control_coefficients[0])),
                     )
                 )
-        else: pass
+        else:
+            pass
 
         if self.measurement0 == []:
             np.random.seed(self.seed)
@@ -207,16 +208,21 @@ class ComprehensiveSystem:
         if type(H0) != np.ndarray:
             #### linear interpolation  ####
             f = interp1d(self.tspan, H0, axis=0)
-        else: pass
+        else:
+            pass
         number = math.ceil((len(self.tspan) - 1) / len(self.control_coefficients[0]))
         if len(self.tspan) - 1 % len(self.control_coefficients[0]) != 0:
             tnum = number * len(self.control_coefficients[0])
             self.tspan = np.linspace(self.tspan[0], self.tspan[-1], tnum + 1)
             if type(H0) != np.ndarray:
                 H0_inter = f(self.tspan)
-                self.freeHamiltonian = [np.array(x, dtype=np.complex128) for x in H0_inter[:-1]]
-            else: pass
-        else: pass
+                self.freeHamiltonian = [
+                    np.array(x, dtype=np.complex128) for x in H0_inter[:-1]
+                ]
+            else:
+                pass
+        else:
+            pass
 
         self.dynamics_type = "dynamics"
 
@@ -225,7 +231,7 @@ class ComprehensiveSystem:
         The parameterization of a state is
         \begin{align}
         \rho=\sum_i K_i\rho_0K_i^{\dagger},
-        \end{align} 
+        \end{align}
 
         where $\rho$ is the evolved density matrix, $K_i$ is the Kraus operator.
 
@@ -235,8 +241,8 @@ class ComprehensiveSystem:
             -- Kraus operators.
 
         > **dK:** `list`
-            -- Derivatives of the Kraus operators on the unknown parameters to be 
-            estimated. For example, dK[0] is the derivative vector on the first 
+            -- Derivatives of the Kraus operators on the unknown parameters to be
+            estimated. For example, dK[0] is the derivative vector on the first
             parameter.
         """
 
@@ -294,31 +300,29 @@ class ComprehensiveSystem:
             -- Weight matrix.
 
         > **M:** `list of matrices`
-            -- A set of positive operator-valued measure (POVM). The default measurement 
+            -- A set of positive operator-valued measure (POVM). The default measurement
             is a set of rank-one symmetric informationally complete POVM (SIC-POVM).
 
         > **target:** `string`
-            -- Objective functions for comprehensive optimization. Options are:  
-            "QFIM" (default) -- choose QFI (QFIM) as the objective function.  
-            "CFIM" -- choose CFI (CFIM) as the objective function.  
-            "HCRB" -- choose HCRB as the objective function.  
+            -- Objective functions for comprehensive optimization. Options are:
+            "QFIM" (default) -- choose QFI (QFIM) as the objective function.
+            "CFIM" -- choose CFI (CFIM) as the objective function.
+            "HCRB" -- choose HCRB as the objective function.
 
         > **LDtype:** `string`
-            -- Types of QFI (QFIM) can be set as the objective function. Options are:  
-            "SLD" (default) -- QFI (QFIM) based on symmetric logarithmic derivative (SLD).  
-            "RLD" -- QFI (QFIM) based on right logarithmic derivative (RLD).  
-            "LLD" -- QFI (QFIM) based on left logarithmic derivative (LLD). 
+            -- Types of QFI (QFIM) can be set as the objective function. Options are:
+            "SLD" (default) -- QFI (QFIM) based on symmetric logarithmic derivative (SLD).
+            "RLD" -- QFI (QFIM) based on right logarithmic derivative (RLD).
+            "LLD" -- QFI (QFIM) based on left logarithmic derivative (LLD).
 
-        **Note:** 
-            SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state 
+        **Note:**
+            SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state
             which can be downloaded from [here](http://www.physics.umb.edu/Research/QBism/
             solutions.html).
         """
 
         if self.dynamics_type != "dynamics":
-            raise ValueError(
-                "Supported type of dynamics is Lindblad."
-                )
+            raise ValueError("Supported type of dynamics is Lindblad.")
 
         if W == []:
             W = np.eye(len(self.Hamiltonian_derivative))
@@ -334,7 +338,9 @@ class ComprehensiveSystem:
                         "Program terminated. In the single-parameter scenario, the HCRB is equivalent to the QFI. Please choose 'QFIM' as the objective function"
                     )
                 else:
-                    self.obj = Main.QuanEstimation.HCRB_obj(self.W, self.eps, self.para_type)
+                    self.obj = Main.QuanEstimation.HCRB_obj(
+                        self.W, self.eps, self.para_type
+                    )
             elif target == "QFIM" and (
                 LDtype == "SLD" or LDtype == "RLD" or LDtype == "LLD"
             ):
@@ -343,14 +349,19 @@ class ComprehensiveSystem:
                 )
             elif target == "CFIM":
                 M = SIC(len(self.psi))
-                self.obj = Main.QuanEstimation.CFIM_obj(M, self.W, self.eps, self.para_type)
+                self.obj = Main.QuanEstimation.CFIM_obj(
+                    M, self.W, self.eps, self.para_type
+                )
             else:
                 raise ValueError(
                     "Please enter the correct values for target and LDtype. Supported target are 'QFIM', 'CFIM' and 'HCRB', supported LDtype are 'SLD', 'RLD' and 'LLD'."
                 )
 
         self.opt = Main.QuanEstimation.StateControlOpt(
-            psi=self.psi, ctrl=self.control_coefficients, ctrl_bound=self.ctrl_bound, seed=self.seed
+            psi=self.psi,
+            ctrl=self.control_coefficients,
+            ctrl_bound=self.ctrl_bound,
+            seed=self.seed,
         )
         self.output = Main.QuanEstimation.Output(self.opt, save=self.savefile)
 
@@ -363,7 +374,7 @@ class ComprehensiveSystem:
             self.tspan,
             self.decay_opt,
             self.gamma,
-            )
+        )
         system = Main.QuanEstimation.QuanEstSystem(
             self.opt, self.alg, self.obj, self.dynamic, self.output
         )
@@ -385,9 +396,7 @@ class ComprehensiveSystem:
         """
 
         if self.dynamics_type != "dynamics":
-            raise ValueError(
-                "Supported type of dynamics is Lindblad."
-                )
+            raise ValueError("Supported type of dynamics is Lindblad.")
 
         if W == []:
             W = np.eye(len(self.Hamiltonian_derivative))
@@ -397,7 +406,10 @@ class ComprehensiveSystem:
 
         self.obj = Main.QuanEstimation.CFIM_obj([], self.W, self.eps, self.para_type)
         self.opt = Main.QuanEstimation.ControlMeasurementOpt(
-            ctrl=self.control_coefficients, M=self.C, ctrl_bound=self.ctrl_bound, seed=self.seed
+            ctrl=self.control_coefficients,
+            M=self.C,
+            ctrl_bound=self.ctrl_bound,
+            seed=self.seed,
         )
         self.output = Main.QuanEstimation.Output(self.opt, save=self.savefile)
 
@@ -410,7 +422,7 @@ class ComprehensiveSystem:
             self.tspan,
             self.decay_opt,
             self.gamma,
-            )
+        )
 
         system = Main.QuanEstimation.QuanEstSystem(
             self.opt, self.alg, self.obj, self.dynamic, self.output
@@ -497,7 +509,8 @@ class ComprehensiveSystem:
                     if type(self.freeHamiltonian) != np.ndarray:
                         #### linear interpolation  ####
                         f = interp1d(self.tspan, self.freeHamiltonian, axis=0)
-                    else: pass
+                    else:
+                        pass
                     number = math.ceil((len(self.tspan) - 1) / len(self.ctrl[0]))
                     if len(self.tspan) - 1 % len(self.ctrl[0]) != 0:
                         tnum = number * len(self.ctrl[0])
@@ -506,9 +519,13 @@ class ComprehensiveSystem:
                         )
                         if type(self.freeHamiltonian) != np.ndarray:
                             H0_inter = f(self.tspan)
-                            self.freeHamiltonian = [np.array(x, dtype=np.complex128) for x in H0_inter]
-                        else: pass
-                    else: pass
+                            self.freeHamiltonian = [
+                                np.array(x, dtype=np.complex128) for x in H0_inter
+                            ]
+                        else:
+                            pass
+                    else:
+                        pass
 
                     if type(self.freeHamiltonian) == np.ndarray:
                         H0 = np.array(self.freeHamiltonian, dtype=np.complex128)
@@ -516,7 +533,10 @@ class ComprehensiveSystem:
                             np.array(x, dtype=np.complex128)
                             for x in self.control_Hamiltonian
                         ]
-                        self.ctrl = [np.array(self.ctrl[i]).repeat(number) for i in range(len(Hc))]
+                        self.ctrl = [
+                            np.array(self.ctrl[i]).repeat(number)
+                            for i in range(len(Hc))
+                        ]
                         Htot = []
                         for i in range(len(self.ctrl[0])):
                             S_ctrl = sum(
@@ -535,7 +555,10 @@ class ComprehensiveSystem:
                             np.array(x, dtype=np.complex128)
                             for x in self.control_Hamiltonian
                         ]
-                        self.ctrl = [np.array(self.ctrl[i]).repeat(number) for i in range(len(Hc))]
+                        self.ctrl = [
+                            np.array(self.ctrl[i]).repeat(number)
+                            for i in range(len(Hc))
+                        ]
                         Htot = []
                         for i in range(len(self.ctrl[0])):
                             S_ctrl = sum(
@@ -559,12 +582,12 @@ class ComprehensiveSystem:
                 W = np.eye(self.para_num)
             self.W = W
         else:
-            raise ValueError(
-                "Supported type of dynamics are Lindblad and Kraus."
-                )
+            raise ValueError("Supported type of dynamics are Lindblad and Kraus.")
 
         self.obj = Main.QuanEstimation.CFIM_obj([], self.W, self.eps, self.para_type)
-        self.opt = Main.QuanEstimation.StateMeasurementOpt(psi=self.psi, M=self.C, seed=self.seed)
+        self.opt = Main.QuanEstimation.StateMeasurementOpt(
+            psi=self.psi, M=self.C, seed=self.seed
+        )
         self.output = Main.QuanEstimation.Output(self.opt, save=self.savefile)
 
         system = Main.QuanEstimation.QuanEstSystem(
@@ -586,16 +609,18 @@ class ComprehensiveSystem:
         """
 
         if self.dynamics_type != "dynamics":
-            raise ValueError(
-                "Supported type of dynamics is Lindblad."
-                )
+            raise ValueError("Supported type of dynamics is Lindblad.")
         if W == []:
             W = np.eye(len(self.Hamiltonian_derivative))
         self.W = W
 
         self.obj = Main.QuanEstimation.CFIM_obj([], self.W, self.eps, self.para_type)
         self.opt = Main.QuanEstimation.StateControlMeasurementOpt(
-            psi=self.psi, ctrl=self.control_coefficients, M=self.C, ctrl_bound=self.ctrl_bound, seed=self.seed
+            psi=self.psi,
+            ctrl=self.control_coefficients,
+            M=self.C,
+            ctrl_bound=self.ctrl_bound,
+            seed=self.seed,
         )
         self.output = Main.QuanEstimation.Output(self.opt, save=self.savefile)
 
@@ -608,7 +633,7 @@ class ComprehensiveSystem:
             self.tspan,
             self.decay_opt,
             self.gamma,
-            )
+        )
 
         system = Main.QuanEstimation.QuanEstSystem(
             self.opt, self.alg, self.obj, self.dynamic, self.output
@@ -637,7 +662,8 @@ class ComprehensiveSystem:
             file_save = open("measurements.csv", "w")
             file_save.writelines(file_load)
             file_save.close()
-        else: pass
+        else:
+            pass
 
 
 def ComprehensiveOpt(savefile=False, method="AD", **kwargs):

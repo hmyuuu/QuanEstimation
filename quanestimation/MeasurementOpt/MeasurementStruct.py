@@ -10,43 +10,43 @@ from quanestimation.Common.Common import gramschmidt, sic_povm
 
 class MeasurementSystem:
     """
-    Attributes
-    ----------
-    > **mtype:** `string`
-        -- The type of scenarios for the measurement optimization. Options are:  
-        "projection" (default) -- Optimization of rank-one projective measurements.  
-        "input" -- Find the optimal linear combination or the optimal rotated measurement 
-        of a given set of POVM.
+     Attributes
+     ----------
+     > **mtype:** `string`
+         -- The type of scenarios for the measurement optimization. Options are:
+         "projection" (default) -- Optimization of rank-one projective measurements.
+         "input" -- Find the optimal linear combination or the optimal rotated measurement
+         of a given set of POVM.
 
-    > **minput:** `list`
-        -- In the case of optimization of rank-one projective measurements, the 
-        `minput` should keep empty. For finding the optimal linear combination and 
-        the optimal rotated measurement of a given set of POVM, the input rule are 
-        `minput=["LC", [Pi1,Pi2,...], m]` and `minput=["LC", [Pi1,Pi2,...]]` respectively.
-        Here `[Pi1,Pi2,...]` represents a list of input POVM and `m` is the number of operators 
-        of the output measurement. 
+     > **minput:** `list`
+         -- In the case of optimization of rank-one projective measurements, the
+         `minput` should keep empty. For finding the optimal linear combination and
+         the optimal rotated measurement of a given set of POVM, the input rule are
+         `minput=["LC", [Pi1,Pi2,...], m]` and `minput=["LC", [Pi1,Pi2,...]]` respectively.
+         Here `[Pi1,Pi2,...]` represents a list of input POVM and `m` is the number of operators
+         of the output measurement.
 
-    > **savefile:** `bool`
-        -- Whether or not to save all the measurements.  
-        If set `True` then the measurements and the values of the 
-        objective function obtained in all episodes will be saved during 
-        the training. If set `False` the measurement in the final 
-        episode and the values of the objective function in all episodes 
-        will be saved.
+     > **savefile:** `bool`
+         -- Whether or not to save all the measurements.
+         If set `True` then the measurements and the values of the
+         objective function obtained in all episodes will be saved during
+         the training. If set `False` the measurement in the final
+         episode and the values of the objective function in all episodes
+         will be saved.
 
-   > **measurement0:** `list of arrays`
-        -- Initial guesses of measurements.
+    > **measurement0:** `list of arrays`
+         -- Initial guesses of measurements.
 
-    > **seed:** `int`
-        -- Random seed.
+     > **seed:** `int`
+         -- Random seed.
 
-    > **eps:** `float`
-        -- Machine epsilon.
+     > **eps:** `float`
+         -- Machine epsilon.
 
-    > **load:** `bool`
-        -- Whether or not to load measurements in the current location.  
-        If set `True` then the program will load measurement from "measurements.csv"
-        file in the current location and use it as the initial measurement.
+     > **load:** `bool`
+         -- Whether or not to load measurements in the current location.
+         If set `True` then the program will load measurement from "measurements.csv"
+         file in the current location and use it as the initial measurement.
     """
 
     def __init__(self, mtype, minput, savefile, measurement0, seed, eps, load):
@@ -67,7 +67,8 @@ class MeasurementSystem:
             file_save = open("measurements.csv", "w")
             file_save.writelines(file_load)
             file_save.close()
-        else: pass
+        else:
+            pass
 
     def dynamics(self, tspan, rho0, H0, dH, Hc=[], ctrl=[], decay=[]):
         r"""
@@ -194,7 +195,10 @@ class MeasurementSystem:
                 elif len(self.measurement0) >= 1:
                     self.B = [self.measurement0[0][i] for i in range(self.M_num)]
                 self.opt = Main.QuanEstimation.Mopt_LinearComb(
-                    B=self.B, POVM_basis=self.povm_basis, M_num=self.M_num, seed=self.seed
+                    B=self.B,
+                    POVM_basis=self.povm_basis,
+                    M_num=self.M_num,
+                    seed=self.seed,
                 )
 
             elif self.minput[0] == "rotation":
@@ -272,7 +276,8 @@ class MeasurementSystem:
                 )
                 for i in range(Hc_num - ctrl_num):
                     ctrl = np.concatenate((ctrl, np.zeros(len(ctrl[0]))))
-            else: pass
+            else:
+                pass
 
             if len(ctrl[0]) == 1:
                 if type(H0) == np.ndarray:
@@ -294,7 +299,8 @@ class MeasurementSystem:
                 if type(H0) != np.ndarray:
                     #### linear interpolation  ####
                     f = interp1d(self.tspan, H0, axis=0)
-                else: pass
+                else:
+                    pass
                 number = math.ceil((len(self.tspan) - 1) / len(ctrl[0]))
                 if len(self.tspan) - 1 % len(ctrl[0]) != 0:
                     tnum = number * len(ctrl[0])
@@ -302,8 +308,10 @@ class MeasurementSystem:
                     if type(H0) != np.ndarray:
                         H0_inter = f(self.tspan)
                         H0 = [np.array(x, dtype=np.complex128) for x in H0_inter]
-                    else: pass
-                else: pass
+                    else:
+                        pass
+                else:
+                    pass
 
                 if type(H0) == np.ndarray:
                     H0 = np.array(H0, dtype=np.complex128)
@@ -360,16 +368,15 @@ class MeasurementSystem:
                 self.tspan,
             )
         self.output = Main.QuanEstimation.Output(self.opt, save=self.savefile)
-        
-        self.dynamics_type = "dynamics"
 
+        self.dynamics_type = "dynamics"
 
     def Kraus(self, rho0, K, dK):
         r"""
         The parameterization of a state is
         \begin{align}
         \rho=\sum_i K_i\rho_0K_i^{\dagger},
-        \end{align} 
+        \end{align}
 
         where $\rho$ is the evolved density matrix, $K_i$ is the Kraus operator.
 
@@ -382,8 +389,8 @@ class MeasurementSystem:
             -- Kraus operators.
 
         > **dK:** `list`
-            -- Derivatives of the Kraus operators on the unknown parameters to be 
-            estimated. For example, dK[0] is the derivative vector on the first 
+            -- Derivatives of the Kraus operators on the unknown parameters to be
+            estimated. For example, dK[0] is the derivative vector on the first
             parameter.
         """
         k_num = len(K)
@@ -475,7 +482,10 @@ class MeasurementSystem:
                         self.measurement0[0][i] for i in range(len(self.povm_basis))
                     ]
                 self.opt = Main.QuanEstimation.Mopt_LinearComb(
-                    B=self.B, POVM_basis=self.povm_basis, M_num=self.M_num, seed=self.seed
+                    B=self.B,
+                    POVM_basis=self.povm_basis,
+                    M_num=self.M_num,
+                    seed=self.seed,
                 )
 
             elif self.minput[0] == "rotation":
@@ -539,8 +549,8 @@ class MeasurementSystem:
 
     def CFIM(self, W=[]):
         r"""
-        Choose CFI or $\mathrm{Tr}(WI^{-1})$ as the objective function. 
-        In single parameter estimation the objective function is CFI and 
+        Choose CFI or $\mathrm{Tr}(WI^{-1})$ as the objective function.
+        In single parameter estimation the objective function is CFI and
         in multiparameter estimation it will be $\mathrm{Tr}(WI^{-1})$.
 
         Parameters
@@ -558,9 +568,7 @@ class MeasurementSystem:
                 W = np.eye(self.para_num)
             self.W = W
         else:
-            raise ValueError(
-                "Supported type of dynamics are Lindblad and Kraus."
-                )
+            raise ValueError("Supported type of dynamics are Lindblad and Kraus.")
 
         self.obj = Main.QuanEstimation.CFIM_obj(
             [], self.W, self.eps, self.para_type

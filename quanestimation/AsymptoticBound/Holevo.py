@@ -16,8 +16,8 @@ def HCRB(rho, drho, W, eps=1e-8):
         -- Density matrix.
 
     > **drho:** `list`
-        -- Derivatives of the density matrix on the unknown parameters to be 
-        estimated. For example, drho[0] is the derivative vector on the first 
+        -- Derivatives of the density matrix on the unknown parameters to be
+        estimated. For example, drho[0] is the derivative vector on the first
         parameter.
 
     > **W:** `matrix`

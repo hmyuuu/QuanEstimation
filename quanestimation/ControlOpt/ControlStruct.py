@@ -13,11 +13,11 @@ class ControlSystem:
     Attributes
     ----------
     > **savefile:** `bool`
-        -- Whether or not to save all the control coeffients.  
-        If set `True` then the control coefficients and the values of the 
-        objective function obtained in all episodes will be saved during 
-        the training. If set `False` the control coefficients in the final 
-        episode and the values of the objective function in all episodes 
+        -- Whether or not to save all the control coeffients.
+        If set `True` then the control coefficients and the values of the
+        objective function obtained in all episodes will be saved during
+        the training. If set `False` the control coefficients in the final
+        episode and the values of the objective function in all episodes
         will be saved.
 
     > **ctrl0:** `list of arrays`
@@ -27,9 +27,9 @@ class ControlSystem:
         -- Machine epsilon.
 
     > **load:** `bool`
-        -- Whether or not to load control coefficients in the current location.  
-        If set `True` then the program will load control coefficients from 
-        "controls.csv" file in the current location and use it as the initial 
+        -- Whether or not to load control coefficients in the current location.
+        If set `True` then the program will load control coefficients from
+        "controls.csv" file in the current location and use it as the initial
         control coefficients.
     """
 
@@ -170,22 +170,28 @@ class ControlSystem:
                         np.zeros(len(self.control_coefficients[0])),
                     )
                 )
-        else: pass
+        else:
+            pass
 
         if type(H0) != np.ndarray:
             #### linear interpolation  ####
             f = interp1d(self.tspan, H0, axis=0)
-        else: pass
+        else:
+            pass
         number = math.ceil((len(self.tspan) - 1) / len(self.control_coefficients[0]))
         if len(self.tspan) - 1 % len(self.control_coefficients[0]) != 0:
             tnum = number * len(self.control_coefficients[0])
             self.tspan = np.linspace(self.tspan[0], self.tspan[-1], tnum + 1)
             if type(H0) != np.ndarray:
                 H0_inter = f(self.tspan)
-                self.freeHamiltonian = [np.array(x, dtype=np.complex128) for x in H0_inter[:-1]]
-            else: pass
-                
-        else: pass
+                self.freeHamiltonian = [
+                    np.array(x, dtype=np.complex128) for x in H0_inter[:-1]
+                ]
+            else:
+                pass
+
+        else:
+            pass
 
         self.opt = Main.QuanEstimation.ControlOpt(
             ctrl=self.control_coefficients, ctrl_bound=self.ctrl_bound, seed=self.seed
@@ -206,8 +212,8 @@ class ControlSystem:
 
     def QFIM(self, W=[], LDtype="SLD"):
         r"""
-        Choose QFI or $\mathrm{Tr}(WF^{-1})$ as the objective function. 
-        In single parameter estimation the objective function is QFI and in 
+        Choose QFI or $\mathrm{Tr}(WF^{-1})$ as the objective function.
+        In single parameter estimation the objective function is QFI and in
         multiparameter estimation it will be $\mathrm{Tr}(WF^{-1})$.
 
         Parameters
@@ -216,10 +222,10 @@ class ControlSystem:
             -- Weight matrix.
 
         > **LDtype:** `string`
-            -- Types of QFI (QFIM) can be set as the objective function. Options are:  
-            "SLD" (default) -- QFI (QFIM) based on symmetric logarithmic derivative (SLD).  
-            "RLD" -- QFI (QFIM) based on right logarithmic derivative (RLD).  
-            "LLD" -- QFI (QFIM) based on left logarithmic derivative (LLD).  
+            -- Types of QFI (QFIM) can be set as the objective function. Options are:
+            "SLD" (default) -- QFI (QFIM) based on symmetric logarithmic derivative (SLD).
+            "RLD" -- QFI (QFIM) based on right logarithmic derivative (RLD).
+            "LLD" -- QFI (QFIM) based on left logarithmic derivative (LLD).
         """
 
         if LDtype != "SLD" and LDtype != "RLD" and LDtype != "LLD":
@@ -243,8 +249,8 @@ class ControlSystem:
 
     def CFIM(self, M=[], W=[]):
         r"""
-        Choose CFI or $\mathrm{Tr}(WI^{-1})$ as the objective function. 
-        In single parameter estimation the objective function is CFI and 
+        Choose CFI or $\mathrm{Tr}(WI^{-1})$ as the objective function.
+        In single parameter estimation the objective function is CFI and
         in multiparameter estimation it will be $\mathrm{Tr}(WI^{-1})$.
 
         Parameters
@@ -253,11 +259,11 @@ class ControlSystem:
             -- Weight matrix.
 
         > **M:** `list`
-            -- A set of positive operator-valued measure (POVM). The default measurement 
+            -- A set of positive operator-valued measure (POVM). The default measurement
             is a set of rank-one symmetric informationally complete POVM (SIC-POVM).
 
-        **Note:** 
-            SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state 
+        **Note:**
+            SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state
             which can be downloaded from [here](http://www.physics.umb.edu/Research/QBism/
             solutions.html).
         """
@@ -278,7 +284,7 @@ class ControlSystem:
 
     def HCRB(self, W=[]):
         """
-        Choose HCRB as the objective function. 
+        Choose HCRB as the objective function.
 
         **Notes:** (1) In single parameter estimation, HCRB is equivalent to QFI, please
         choose QFI as the objective function. (2) GRAPE and auto-GRAPE are not available
@@ -286,7 +292,7 @@ class ControlSystem:
 
         Parameters
         ----------
-        > **W:** `matrix` 
+        > **W:** `matrix`
             -- Weight matrix.
         """
 
@@ -295,12 +301,13 @@ class ControlSystem:
         self.W = W
 
         if len(self.Hamiltonian_derivative) == 1:
-            print("Program terminated. In the single-parameter scenario, HCRB is equivalent to QFI. Please choose QFIM as the objective function."
-                    )
+            print(
+                "Program terminated. In the single-parameter scenario, HCRB is equivalent to QFI. Please choose QFIM as the objective function."
+            )
         else:
             if W == []:
                 W = np.eye(len(self.Hamiltonian_derivative))
-            self.W = W  
+            self.W = W
 
             self.obj = Main.QuanEstimation.HCRB_obj(self.W, self.eps, self.para_type)
             system = Main.QuanEstimation.QuanEstSystem(
@@ -321,27 +328,27 @@ class ControlSystem:
             -- Weight matrix.
 
         > **M:** `list of matrices`
-            -- A set of positive operator-valued measure (POVM). The default measurement 
+            -- A set of positive operator-valued measure (POVM). The default measurement
             is a set of rank-one symmetric informationally complete POVM (SIC-POVM).
 
         > **method:** `string`
-            -- Methods for searching the minimum time to reach the given value of the 
-            objective function. Options are:  
-            "binary" (default) -- Binary search (logarithmic search).  
-            "forward" -- Forward search from the beginning of time.  
+            -- Methods for searching the minimum time to reach the given value of the
+            objective function. Options are:
+            "binary" (default) -- Binary search (logarithmic search).
+            "forward" -- Forward search from the beginning of time.
 
         > **target:** `string`
-            -- Objective functions for searching the minimum time to reach the given 
-            value of the objective function. Options are:  
-            "QFIM" (default) -- Choose QFI (QFIM) as the objective function.  
-            "CFIM" -- Choose CFI (CFIM) as the objective function.  
-            "HCRB" -- Choose HCRB as the objective function.  
+            -- Objective functions for searching the minimum time to reach the given
+            value of the objective function. Options are:
+            "QFIM" (default) -- Choose QFI (QFIM) as the objective function.
+            "CFIM" -- Choose CFI (CFIM) as the objective function.
+            "HCRB" -- Choose HCRB as the objective function.
 
         > **LDtype:** `string`
-            -- Types of QFI (QFIM) can be set as the objective function. Options are:  
-            "SLD" (default) -- QFI (QFIM) based on symmetric logarithmic derivative (SLD).  
-            "RLD" -- QFI (QFIM) based on right logarithmic derivative (RLD).  
-            "LLD" -- QFI (QFIM) based on left logarithmic derivative (LLD).  
+            -- Types of QFI (QFIM) can be set as the objective function. Options are:
+            "SLD" (default) -- QFI (QFIM) based on symmetric logarithmic derivative (SLD).
+            "RLD" -- QFI (QFIM) based on right logarithmic derivative (RLD).
+            "LLD" -- QFI (QFIM) based on left logarithmic derivative (LLD).
         """
 
         if not (method == "binary" or method == "forward"):
@@ -352,14 +359,12 @@ class ControlSystem:
             )
 
         if self.dynamics_type != "lindblad":
-            raise ValueError(
-                "Supported type of dynamics is Lindblad."
-                )
+            raise ValueError("Supported type of dynamics is Lindblad.")
         if self.savefile == True:
             warnings.warn(
-                    "savefile is set to be False",
-                    DeprecationWarning,
-                )
+                "savefile is set to be False",
+                DeprecationWarning,
+            )
         self.output = Main.QuanEstimation.Output(self.opt)
 
         if len(self.Hamiltonian_derivative) > 1:
@@ -376,7 +381,8 @@ class ControlSystem:
             if target == "HCRB":
                 if self.para_type == "single_para":
                     print(
-                        "Program terminated. In the single-parameter scenario, the HCRB is equivalent to the QFI. Please choose 'QFIM' as the objective function.")
+                        "Program terminated. In the single-parameter scenario, the HCRB is equivalent to the QFI. Please choose 'QFIM' as the objective function."
+                    )
                 self.obj = Main.QuanEstimation.HCRB_obj(
                     self.W, self.eps, self.para_type
                 )
@@ -411,7 +417,8 @@ def ControlOpt(savefile=False, method="auto-GRAPE", **kwargs):
         return ctrl.DDPG_Copt(savefile=savefile, **kwargs)
     else:
         raise ValueError(
-            "{!r} is not a valid value for method, supported values are 'auto-GRAPE', 'GRAPE', 'PSO', 'DE', 'DDPG'.".format(method
+            "{!r} is not a valid value for method, supported values are 'auto-GRAPE', 'GRAPE', 'PSO', 'DE', 'DDPG'.".format(
+                method
             )
         )
 
