@@ -8,5 +8,5 @@ from quanestimation.Parameterization.NonDynamics import (
 __all__ = [
     "Lindblad",
     "secondorder_derivative",
-    "Kraus", 
+    "Kraus",
 ]

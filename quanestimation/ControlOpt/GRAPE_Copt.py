@@ -8,11 +8,11 @@ class GRAPE_Copt(Control.ControlSystem):
     Attributes
     ----------
     > **savefile:** `bool`
-        -- Whether or not to save all the control coeffients.  
-        If set `True` then the control coefficients and the values of the 
-        objective function obtained in all episodes will be saved during 
-        the training. If set `False` the control coefficients in the final 
-        episode and the values of the objective function in all episodes 
+        -- Whether or not to save all the control coeffients.
+        If set `True` then the control coefficients and the values of the
+        objective function obtained in all episodes will be saved during
+        the training. If set `False` the control coefficients in the final
+        episode and the values of the objective function in all episodes
         will be saved.
 
     > **Adam:** `bool`
@@ -23,7 +23,7 @@ class GRAPE_Copt(Control.ControlSystem):
 
     > **max_episode:** `int`
         -- The number of episodes.
-  
+
     > **epsilon:** `float`
         -- Learning rate.
 
@@ -37,18 +37,18 @@ class GRAPE_Copt(Control.ControlSystem):
         -- Machine epsilon.
 
     > **load:** `bool`
-        -- Whether or not to load control coefficients in the current location.  
-        If set `True` then the program will load control coefficients from 
-        "controls.csv" file in the current location and use it as the initial 
+        -- Whether or not to load control coefficients in the current location.
+        If set `True` then the program will load control coefficients from
+        "controls.csv" file in the current location and use it as the initial
         control coefficients.
 
     > **auto:** `bool`
-        -- Whether or not to invoke automatic differentiation algorithm to evaluate  
-        the gradient. If set `True` then the gradient will be calculated with 
-        automatic differentiation algorithm otherwise it will be calculated 
+        -- Whether or not to invoke automatic differentiation algorithm to evaluate
+        the gradient. If set `True` then the gradient will be calculated with
+        automatic differentiation algorithm otherwise it will be calculated
         using analytical method.
     """
-    
+
     def __init__(
         self,
         savefile=False,
@@ -78,8 +78,8 @@ class GRAPE_Copt(Control.ControlSystem):
 
     def QFIM(self, W=[], LDtype="SLD"):
         r"""
-        Choose QFI or $\mathrm{Tr}(WF^{-1})$ as the objective function. 
-        In single parameter estimation the objective function is QFI and in 
+        Choose QFI or $\mathrm{Tr}(WF^{-1})$ as the objective function.
+        In single parameter estimation the objective function is QFI and in
         multiparameter estimation it will be $\mathrm{Tr}(WF^{-1})$.
 
         Parameters
@@ -88,9 +88,9 @@ class GRAPE_Copt(Control.ControlSystem):
             -- Weight matrix.
 
         > **LDtype:** `string`
-            -- Types of QFI (QFIM) can be set as the objective function. Options are:  
-            "SLD" (default) -- QFI (QFIM) based on symmetric logarithmic derivative (SLD).  
-            "RLD" -- QFI (QFIM) based on right logarithmic derivative (RLD).  
+            -- Types of QFI (QFIM) can be set as the objective function. Options are:
+            "SLD" (default) -- QFI (QFIM) based on symmetric logarithmic derivative (SLD).
+            "RLD" -- QFI (QFIM) based on right logarithmic derivative (RLD).
             "LLD" -- QFI (QFIM) based on left logarithmic derivative (LLD).
         """
 
@@ -103,9 +103,11 @@ class GRAPE_Copt(Control.ControlSystem):
                 self.alg = QuanEstimation.autoGRAPE(self.max_episode, self.epsilon)
         else:
             if (len(self.tspan) - 1) != len(self.control_coefficients[0]):
-                warnings.warn("GRAPE is not available when the length of each control is not \
+                warnings.warn(
+                    "GRAPE is not available when the length of each control is not \
                                equal to the length of time, and is replaced by auto-GRAPE.",
-                               DeprecationWarning)
+                    DeprecationWarning,
+                )
                 #### call autoGRAPE automatically ####
                 if self.Adam:
                     self.alg = QuanEstimation.autoGRAPE(
@@ -118,7 +120,7 @@ class GRAPE_Copt(Control.ControlSystem):
                     if self.Adam:
                         self.alg = QuanEstimation.GRAPE(
                             self.max_episode, self.epsilon, self.beta1, self.beta2
-                            )
+                        )
                     else:
                         self.alg = QuanEstimation.GRAPE(self.max_episode, self.epsilon)
                 else:
@@ -128,8 +130,8 @@ class GRAPE_Copt(Control.ControlSystem):
 
     def CFIM(self, M=[], W=[]):
         r"""
-        Choose CFI or $\mathrm{Tr}(WI^{-1})$ as the objective function. 
-        In single parameter estimation the objective function is CFI and 
+        Choose CFI or $\mathrm{Tr}(WI^{-1})$ as the objective function.
+        In single parameter estimation the objective function is CFI and
         in multiparameter estimation it will be $\mathrm{Tr}(WI^{-1})$.
 
         Parameters
@@ -138,11 +140,11 @@ class GRAPE_Copt(Control.ControlSystem):
             -- Weight matrix.
 
         > **M:** `list of matrices`
-            -- A set of positive operator-valued measure (POVM). The default measurement 
+            -- A set of positive operator-valued measure (POVM). The default measurement
             is a set of rank-one symmetric informationally complete POVM (SIC-POVM).
 
-        **Note:** 
-            SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state 
+        **Note:**
+            SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state
             which can be downloaded from [here](http://www.physics.umb.edu/Research/QBism/
             solutions.html).
         """
@@ -156,9 +158,11 @@ class GRAPE_Copt(Control.ControlSystem):
                 self.alg = QuanEstimation.autoGRAPE(self.max_episode, self.epsilon)
         else:
             if (len(self.tspan) - 1) != len(self.control_coefficients[0]):
-                warnings.warn("GRAPE is not available when the length of each control is not \
+                warnings.warn(
+                    "GRAPE is not available when the length of each control is not \
                                equal to the length of time, and is replaced by auto-GRAPE.",
-                               DeprecationWarning)
+                    DeprecationWarning,
+                )
                 #### call autoGRAPE automatically ####
                 if self.Adam:
                     self.alg = QuanEstimation.autoGRAPE(
@@ -166,7 +170,7 @@ class GRAPE_Copt(Control.ControlSystem):
                     )
                 else:
                     self.alg = QuanEstimation.autoGRAPE(self.max_episode, self.epsilon)
-            else:    
+            else:
                 if self.Adam:
                     self.alg = QuanEstimation.GRAPE(
                         self.max_episode, self.epsilon, self.beta1, self.beta2
@@ -178,7 +182,7 @@ class GRAPE_Copt(Control.ControlSystem):
 
     def HCRB(self, W=[]):
         """
-        GRAPE and auto-GRAPE are not available when the objective function is HCRB. 
+        GRAPE and auto-GRAPE are not available when the objective function is HCRB.
         Supported methods are PSO, DE and DDPG.
 
         Parameters
@@ -203,30 +207,30 @@ class GRAPE_Copt(Control.ControlSystem):
             -- Weight matrix.
 
         > **M:** `list of matrices`
-            -- A set of positive operator-valued measure (POVM). The default measurement 
+            -- A set of positive operator-valued measure (POVM). The default measurement
             is a set of rank-one symmetric informationally complete POVM (SIC-POVM).
 
         > **method:** `string`
-            -- Methods for searching the minimum time to reach the given value of the 
-            objective function. Options are:  
-            "binary" (default) -- Binary search (logarithmic search).  
-            "forward" -- Forward search from the beginning of time.  
+            -- Methods for searching the minimum time to reach the given value of the
+            objective function. Options are:
+            "binary" (default) -- Binary search (logarithmic search).
+            "forward" -- Forward search from the beginning of time.
 
         > **target:** `string`
-            -- Objective functions for searching the minimum time to reach the given 
-            value of the objective function. Options are:  
-            "QFIM" (default) -- Choose QFI (QFIM) as the objective function.  
-            "CFIM" -- Choose CFI (CFIM) as the objective function.  
+            -- Objective functions for searching the minimum time to reach the given
+            value of the objective function. Options are:
+            "QFIM" (default) -- Choose QFI (QFIM) as the objective function.
+            "CFIM" -- Choose CFI (CFIM) as the objective function.
             "HCRB" -- Choose HCRB as the objective function.
 
         > **LDtype:** `string`
-            -- Types of QFI (QFIM) can be set as the objective function. Options are:  
-            "SLD" (default) -- QFI (QFIM) based on symmetric logarithmic derivative (SLD).  
-            "RLD" -- QFI (QFIM) based on right logarithmic derivative (RLD).  
+            -- Types of QFI (QFIM) can be set as the objective function. Options are:
+            "SLD" (default) -- QFI (QFIM) based on symmetric logarithmic derivative (SLD).
+            "RLD" -- QFI (QFIM) based on right logarithmic derivative (RLD).
             "LLD" -- QFI (QFIM) based on left logarithmic derivative (LLD).
 
-        **Note:** 
-            SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state 
+        **Note:**
+            SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state
             which can be downloaded from [here](http://www.physics.umb.edu/Research/QBism/
             solutions.html).
         """
@@ -243,11 +247,11 @@ class GRAPE_Copt(Control.ControlSystem):
             else:
                 self.alg = QuanEstimation.autoGRAPE(self.max_episode, self.epsilon)
         else:
-            
+
             if self.Adam:
                 self.alg = QuanEstimation.GRAPE(
-                        self.max_episode, self.epsilon, self.beta1, self.beta2
-                    )
+                    self.max_episode, self.epsilon, self.beta1, self.beta2
+                )
             else:
                 self.alg = QuanEstimation.GRAPE(self.max_episode, self.epsilon)
 

@@ -10,12 +10,7 @@ from quanestimation.BayesianBound.BayesCramerRao import (
 from quanestimation.BayesianBound.ZivZakai import (
     QZZB,
 )
-from quanestimation.BayesianBound.BayesEstimation import (
-    Bayes,
-    MLE,
-    BCB,
-    BayesCost
-)
+from quanestimation.BayesianBound.BayesEstimation import Bayes, MLE, BCB, BayesCost
 
 __all__ = [
     "BCFIM",

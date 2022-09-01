@@ -16,8 +16,8 @@ def HCRB(rho, drho, W, eps=1e-8):
         -- Density matrix.
 
     > **drho:** `list`
-        -- Derivatives of the density matrix on the unknown parameters to be 
-        estimated. For example, drho[0] is the derivative vector on the first 
+        -- Derivatives of the density matrix on the unknown parameters to be
+        estimated. For example, drho[0] is the derivative vector on the first
         parameter.
 
     > **W:** `matrix`
@@ -89,6 +89,7 @@ def HCRB(rho, drho, W, eps=1e-8):
 
         return prob.value
 
+
 def NHB(rho, drho, W):
     """
     Calculation of the Nagaoka-Hayashi bound (NHB) via the semidefinite program (SDP).
@@ -99,8 +100,8 @@ def NHB(rho, drho, W):
         -- Density matrix.
 
     > **drho:** `list`
-        -- Derivatives of the density matrix on the unknown parameters to be 
-        estimated. For example, drho[0] is the derivative vector on the first 
+        -- Derivatives of the density matrix on the unknown parameters to be
+        estimated. For example, drho[0] is the derivative vector on the first
         parameter.
 
     > **W:** `matrix`
@@ -113,7 +114,7 @@ def NHB(rho, drho, W):
     """
     dim = len(rho)
     para_num = len(drho)
-    
+
     L_tp = [[[] for i in range(para_num)] for j in range(para_num)]
     for para_i in range(para_num):
         for para_j in range(para_i, para_num):
@@ -121,9 +122,9 @@ def NHB(rho, drho, W):
             L_tp[para_j][para_i] = L_tp[para_i][para_j]
     L = cp.vstack([cp.hstack(L_tp[i]) for i in range(para_num)])
     X = [cp.Variable((dim, dim), hermitian=True) for j in range(para_num)]
-    
-    constraints = [cp.bmat([[L, cp.vstack(X)], [cp.hstack(X), np.identity(dim)]])  >> 0]
-    
+
+    constraints = [cp.bmat([[L, cp.vstack(X)], [cp.hstack(X), np.identity(dim)]]) >> 0]
+
     for i in range(para_num):
         constraints += [cp.trace(X[i] @ rho) == 0]
         for j in range(para_num):
