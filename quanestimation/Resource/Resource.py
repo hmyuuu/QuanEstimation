@@ -12,13 +12,13 @@ def SpinSqueezing(rho, basis="Dicke", output="KU"):
         -- Density matrix.
 
     > **basis:** `string`
-        -- The basis of the state. Options are:  
-        "Dicke" (default) -- Dicke basis.  
+        -- The basis of the state. Options are:
+        "Dicke" (default) -- Dicke basis.
         "Pauli" -- The original basis of each spin.
 
     > **output:** `string`
-        -- Types of spin squeezing can be calculated. Options are:  
-        "KU" (default) -- Spin squeezing defined by Kitagawa and Ueda.  
+        -- Types of spin squeezing can be calculated. Options are:
+        "KU" (default) -- Spin squeezing defined by Kitagawa and Ueda.
         "WBIMH" -- Spin squeezing defined by Wineland et al.
 
     Returns
@@ -32,22 +32,24 @@ def SpinSqueezing(rho, basis="Dicke", output="KU"):
     coef = 4.0 / float(N)
     j = N / 2
     if basis == "Pauli":
-        sp = np.array([[0.0,1.0],[0.0, 0.0]])
+        sp = np.array([[0.0, 1.0], [0.0, 0.0]])
         jp = []
-        for i in range(0, N): 
-            if i==0 :
-                jp_tp = np.kron(sp, np.identity(2**(N-1)))
-            elif i==N-1 :
-                jp_tp = np.kron(np.identity(2**(N-1)), sp)
+        for i in range(0, N):
+            if i == 0:
+                jp_tp = np.kron(sp, np.identity(2 ** (N - 1)))
+            elif i == N - 1:
+                jp_tp = np.kron(np.identity(2 ** (N - 1)), sp)
             else:
-                jp_tp = np.kron(np.identity(2**i), np.kron(sp, np.identity(2**(N-1-i))))
+                jp_tp = np.kron(
+                    np.identity(2**i), np.kron(sp, np.identity(2 ** (N - 1 - i)))
+                )
             jp.append(jp_tp)
         Jp = sum(jp)
     else:
         offdiag = [
             np.sqrt(float(j * (j + 1) - m * (m + 1))) for m in np.arange(j, -j - 1, -1)
         ][1:]
-    
+
         Jp = np.matrix(np.diag(offdiag, 1))
     Jx = 0.5 * (Jp + Jp.H)
     Jy = -0.5 * 1j * (Jp - Jp.H)

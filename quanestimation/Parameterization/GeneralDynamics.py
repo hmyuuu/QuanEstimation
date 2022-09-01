@@ -50,7 +50,7 @@ class Lindblad:
     """
 
     def __init__(self, tspan, rho0, H0, dH, decay=[], Hc=[], ctrl=[]):
-        
+
         self.tspan = tspan
         self.rho0 = np.array(rho0, dtype=np.complex128)
 
@@ -110,8 +110,8 @@ class Lindblad:
 
     def expm(self):
         r"""
-        Calculation of the density matrix and its derivatives on the unknown parameters 
-        with matrix exponential method (expm). The density matrix at $j$th time interval is obtained by 
+        Calculation of the density matrix and its derivatives on the unknown parameters
+        with matrix exponential method (expm). The density matrix at $j$th time interval is obtained by
         $\rho_j=e^{\Delta t\mathcal{L}}\rho_{j-1}$, where $\Delta t$ is the time
         interval and $\rho_{j-1}$ is the density matrix for the $(j-1)$th time interval.
         $\partial_{\textbf{x}}\rho_j$ is calculated as
@@ -136,9 +136,9 @@ class Lindblad:
 
     def ode(self):
         r"""
-        Calculation of the density matrix and its derivatives on the unknown parameters 
+        Calculation of the density matrix and its derivatives on the unknown parameters
         with ordinary differential equations (ODE) solver.
-        The density matrix at $j$th time interval is obtained by 
+        The density matrix at $j$th time interval is obtained by
         $\rho_j=e^{\Delta t\mathcal{L}}\rho_{j-1}$, where $\Delta t$ is the time
         interval and $\rho_{j-1}$ is the density matrix for the $(j-1)$th time interval.
         $\partial_{\textbf{x}}\rho_j$ is calculated as
@@ -160,11 +160,11 @@ class Lindblad:
             self.control_coefficients,
         )
         return rho, drho
-        
+
     def secondorder_derivative(self, d2H):
         r"""
         Calculation of the density matrix and its derivatives and the second derivatives
-        on $\textbf{x}$. The density matrix at $j$th time interval is obtained by 
+        on $\textbf{x}$. The density matrix at $j$th time interval is obtained by
         $\rho_j=e^{\Delta t\mathcal{L}}\rho_{j-1}$, where $\Delta t$ is the time
         interval and $\rho_{j-1}$ is the density matrix for the $(j-1)$th time interval.
         $\partial_{\textbf{x}}\rho_j$ is calculated via
@@ -185,7 +185,7 @@ class Lindblad:
         Parameters
         ----------
         > **d2H:** `list`
-            -- Second order derivatives of the free Hamiltonian on the unknown parameters 
+            -- Second order derivatives of the free Hamiltonian on the unknown parameters
             to be estimated.
         """
 

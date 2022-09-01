@@ -5,7 +5,7 @@ import julia
 import platform
 from .Common._julia_project import project
 
-if platform.system() != 'Windows':
+if platform.system() != "Windows":
     project.ensure_init()
 
 if julia.find_libpython.linked_libpython() is None:
@@ -24,7 +24,8 @@ from quanestimation.AsymptoticBound.CramerRao import (
     SLD,
 )
 from quanestimation.AsymptoticBound.AnalogCramerRao import (
-    HCRB, NHB, 
+    HCRB,
+    NHB,
 )
 from quanestimation.BayesianBound.BayesCramerRao import (
     BCFIM,
@@ -38,12 +39,7 @@ from quanestimation.BayesianBound.BayesCramerRao import (
 from quanestimation.BayesianBound.ZivZakai import (
     QZZB,
 )
-from quanestimation.BayesianBound.BayesEstimation import (
-    Bayes,
-    MLE,
-    BCB,
-    BayesCost
-)
+from quanestimation.BayesianBound.BayesEstimation import Bayes, MLE, BCB, BayesCost
 
 from quanestimation.Common.Common import (
     mat_vec_convert,
@@ -140,7 +136,6 @@ from quanestimation.StateOpt.RI_Sopt import (
 
 from quanestimation.AdaptiveScheme.Adapt import Adapt
 from quanestimation.AdaptiveScheme.Adapt_MZI import Adapt_MZI
-
 
 
 __all__ = [

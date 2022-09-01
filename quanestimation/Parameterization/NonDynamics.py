@@ -6,7 +6,7 @@ def Kraus(rho0, K, dK):
     The parameterization of a state is
     \begin{align}
     \rho=\sum_i K_i\rho_0K_i^{\dagger},
-    \end{align} 
+    \end{align}
 
     where $\rho$ is the evolved density matrix, $K_i$ is the Kraus operator.
 
@@ -16,8 +16,8 @@ def Kraus(rho0, K, dK):
         -- Kraus operators.
 
     > **dK:** `list`
-        -- Derivatives of the Kraus operators with respect to the unknown parameters to be 
-        estimated. For example, dK[0] is the derivative vector on the first 
+        -- Derivatives of the Kraus operators with respect to the unknown parameters to be
+        estimated. For example, dK[0] is the derivative vector on the first
         parameter.
 
     > **rho0:** `matrix`
@@ -33,8 +33,17 @@ def Kraus(rho0, K, dK):
     dK_reshape = [[dK[i][j] for i in range(k_num)] for j in range(para_num)]
 
     rho = sum([np.dot(Ki, np.dot(rho0, Ki.conj().T)) for Ki in K])
-    drho = [sum([(np.dot(dKi, np.dot(rho0, Ki.conj().T))+ np.dot(Ki, np.dot(rho0, dKi.conj().T))) for (Ki, dKi) in zip(K, dKj)]) for dKj in dK_reshape]
+    drho = [
+        sum(
+            [
+                (
+                    np.dot(dKi, np.dot(rho0, Ki.conj().T))
+                    + np.dot(Ki, np.dot(rho0, dKi.conj().T))
+                )
+                for (Ki, dKi) in zip(K, dKj)
+            ]
+        )
+        for dKj in dK_reshape
+    ]
 
     return rho, drho
-    
-    

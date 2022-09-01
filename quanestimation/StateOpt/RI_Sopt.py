@@ -7,11 +7,11 @@ class RI_Sopt(State.StateSystem):
     Attributes
     ----------
     > **savefile:**  `bool`
-        -- Whether or not to save all the states.  
-        If set `True` then the states and the values of the 
-        objective function obtained in all episodes will be saved during 
-        the training. If set `False` the state in the final 
-        episode and the values of the objective function in all episodes 
+        -- Whether or not to save all the states.
+        If set `True` then the states and the values of the
+        objective function obtained in all episodes will be saved during
+        the training. If set `False` the state in the final
+        episode and the values of the objective function in all episodes
         will be saved.
 
     > **psi0:** `list of arrays`
@@ -27,7 +27,7 @@ class RI_Sopt(State.StateSystem):
         -- Machine epsilon.
 
     > **load:** `bool`
-        -- Whether or not to load states in the current location.  
+        -- Whether or not to load states in the current location.
         If set `True` then the program will load state from "states.csv"
         file in the current location and use it as the initial state.
     """
@@ -49,7 +49,7 @@ class RI_Sopt(State.StateSystem):
 
     def QFIM(self, W=[], LDtype="SLD"):
         r"""
-        Choose QFI as the objective function. 
+        Choose QFI as the objective function.
 
         Parameters
         ----------
@@ -64,8 +64,10 @@ class RI_Sopt(State.StateSystem):
             self.max_episode,
         )
         if self.dynamics_type != "Kraus":
-            raise ValueError("Only the parameterization with Kraus operators is available.")
-        
+            raise ValueError(
+                "Only the parameterization with Kraus operators is available."
+            )
+
         if LDtype == "SLD":
             super().QFIM(W, LDtype)
         else:
@@ -73,7 +75,7 @@ class RI_Sopt(State.StateSystem):
 
     def CFIM(self, M=[], W=[]):
         """
-        Choose CFIM as the objective function. 
+        Choose CFIM as the objective function.
 
         **Note:** CFIM is not available.
 
@@ -81,7 +83,7 @@ class RI_Sopt(State.StateSystem):
         ----------
         > **M:** `list`
             -- POVM.
-            
+
         > **W:** `matrix`
             -- Weight matrix.
         """
@@ -89,7 +91,7 @@ class RI_Sopt(State.StateSystem):
 
     def HCRB(self, W=[]):
         """
-        Choose HCRB as the objective function. 
+        Choose HCRB as the objective function.
 
         **Note:** Here HCRB is not available.
 

@@ -42,7 +42,7 @@ def suN_generator(n):
 
     Parameters
     ----------
-    > **n:** `int` 
+    > **n:** `int`
         -- The dimension of the system.
 
     Returns
@@ -144,20 +144,20 @@ def sic_povm(fiducial):
 
 def SIC(dim):
     """
-    Generation of a set of rank-one symmetric informationally complete 
+    Generation of a set of rank-one symmetric informationally complete
     positive operator-valued measure (SIC-POVM).
 
     Parameters
     ----------
-    > **dim:** `int` 
+    > **dim:** `int`
         -- The dimension of the system.
 
     Returns
     ----------
     A set of SCI-POVM.
 
-    **Note:** 
-        SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state 
+    **Note:**
+        SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state
         which can be downloaded from [here](http://www.physics.umb.edu/Research/QBism/
         solutions.html).
     """
@@ -221,8 +221,8 @@ def BayesInput(x, func, dfunc, channel="dynamics"):
         -- Function defined by the users which returns dH or dK.
 
     > **channel:** `string`
-        -- Seeting the output of this function. Options are:  
-        "dynamics" (default) --  The output of this function is H and dH.  
+        -- Seeting the output of this function. Options are:
+        "dynamics" (default) --  The output of this function is H and dH.
         "Kraus" (default) --  The output of this function is K and dHK.
 
     Returns

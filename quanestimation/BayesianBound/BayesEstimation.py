@@ -7,9 +7,9 @@ from itertools import product
 
 def Bayes(x, p, rho, y, M=[], estimator="mean", savefile=False):
     """
-    Bayesian estimation. The prior distribution is updated via the posterior  
+    Bayesian estimation. The prior distribution is updated via the posterior
     distribution obtained by the Bayes’ rule and the estimated value of parameters
-    are updated via the expectation value of the distribution or maximum a 
+    are updated via the expectation value of the distribution or maximum a
     posteriori probability (MAP).
 
     Parameters
@@ -27,28 +27,28 @@ def Bayes(x, p, rho, y, M=[], estimator="mean", savefile=False):
         -- The experimental results obtained in practice.
 
     > **M:** `list of matrices`
-        -- A set of positive operator-valued measure (POVM). The default measurement 
+        -- A set of positive operator-valued measure (POVM). The default measurement
         is a set of rank-one symmetric informationally complete POVM (SIC-POVM).
 
     > **estimator:** `string`
-        -- Estimators for the bayesian estimation. Options are:  
-        "mean" -- The expectation value of the distribution.  
+        -- Estimators for the bayesian estimation. Options are:
+        "mean" -- The expectation value of the distribution.
         "MAP" -- Maximum a posteriori probability.
 
     > **savefile:** `bool`
-        -- Whether or not to save all the posterior distributions.  
+        -- Whether or not to save all the posterior distributions.
         If set `True` then two files "pout.npy" and "xout.npy" will be generated including
-        the posterior distributions and the estimated values in the iterations. If set 
+        the posterior distributions and the estimated values in the iterations. If set
         `False` the posterior distribution in the final iteration and the estimated values
-        in all iterations will be saved in "pout.npy" and "xout.npy". 
+        in all iterations will be saved in "pout.npy" and "xout.npy".
 
     Returns
     ----------
     **pout and xout:** `array and float`
         -- The posterior distribution and the estimated values in the final iteration.
 
-    **Note:** 
-        SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state 
+    **Note:**
+        SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state
         which can be downloaded from [here](http://www.physics.umb.edu/Research/QBism/
         solutions.html).
     """
@@ -75,7 +75,7 @@ def Bayes(x, p, rho, y, M=[], estimator="mean", savefile=False):
                     py = simps(arr, x[0])
                     p_update = pyx * p / py
                     p = p_update
-                    mean = simps([p[m]*x[0][m] for m in range(len(x[0]))], x[0])
+                    mean = simps([p[m] * x[0][m] for m in range(len(x[0]))], x[0])
                     x_out.append(mean)
             elif estimator == "MAP":
                 for mi in range(max_episode):
@@ -92,7 +92,10 @@ def Bayes(x, p, rho, y, M=[], estimator="mean", savefile=False):
                     x_out.append(x[0][indx])
             else:
                 raise ValueError(
-                "{!r} is not a valid value for estimator, supported values are 'mean' and 'MAP'.".format(estimator))
+                    "{!r} is not a valid value for estimator, supported values are 'mean' and 'MAP'.".format(
+                        estimator
+                    )
+                )
             np.save("pout", p)
             np.save("xout", x_out)
             return p, x_out[-1]
@@ -109,7 +112,7 @@ def Bayes(x, p, rho, y, M=[], estimator="mean", savefile=False):
                     py = simps(arr, x[0])
                     p_update = pyx * p / py
                     p = p_update
-                    mean = simps([p[m]*x[0][m] for m in range(len(x[0]))], x[0])
+                    mean = simps([p[m] * x[0][m] for m in range(len(x[0]))], x[0])
                     p_out.append(p)
                     x_out.append(mean)
             elif estimator == "MAP":
@@ -128,7 +131,10 @@ def Bayes(x, p, rho, y, M=[], estimator="mean", savefile=False):
                     x_out.append(x[0][indx])
             else:
                 raise ValueError(
-                "{!r} is not a valid value for estimator, supported values are 'mean' and 'MAP'.".format(estimator))
+                    "{!r} is not a valid value for estimator, supported values are 'mean' and 'MAP'.".format(
+                        estimator
+                    )
+                )
             np.save("pout", p_out)
             np.save("xout", x_out)
             return p, x_out[-1]
@@ -166,7 +172,7 @@ def Bayes(x, p, rho, y, M=[], estimator="mean", savefile=False):
                     py = arr
                     p_update = p * pyx / py
                     p = p_update
-                    
+
                     mean = integ(x, p)
                     x_out.append(mean)
             elif estimator == "MAP":
@@ -188,7 +194,10 @@ def Bayes(x, p, rho, y, M=[], estimator="mean", savefile=False):
                     x_out.append([x[i][indx[i][0]] for i in range(para_num)])
             else:
                 raise ValueError(
-                "{!r} is not a valid value for estimator, supported values are 'mean' and 'MAP'.".format(estimator))
+                    "{!r} is not a valid value for estimator, supported values are 'mean' and 'MAP'.".format(
+                        estimator
+                    )
+                )
             np.save("pout", p)
             np.save("xout", x_out)
             return p, x_out[-1]
@@ -232,7 +241,10 @@ def Bayes(x, p, rho, y, M=[], estimator="mean", savefile=False):
                     x_out.append([x[i][indx[i][0]] for i in range(para_num)])
             else:
                 raise ValueError(
-                "{!r} is not a valid value for estimator, supported values are 'mean' and 'MAP'.".format(estimator))
+                    "{!r} is not a valid value for estimator, supported values are 'mean' and 'MAP'.".format(
+                        estimator
+                    )
+                )
             np.save("pout", p_out)
             np.save("xout", x_out)
             return p, x_out[-1]
@@ -240,7 +252,7 @@ def Bayes(x, p, rho, y, M=[], estimator="mean", savefile=False):
 
 def MLE(x, rho, y, M=[], savefile=False):
     """
-    Bayesian estimation. The estimated value of parameters obtained via the 
+    Bayesian estimation. The estimated value of parameters obtained via the
     maximum likelihood estimation (MLE).
 
     Parameters
@@ -255,23 +267,23 @@ def MLE(x, rho, y, M=[], savefile=False):
         -- The experimental results obtained in practice.
 
     > **M:** `list of matrices`
-        -- A set of positive operator-valued measure (POVM). The default measurement 
+        -- A set of positive operator-valued measure (POVM). The default measurement
         is a set of rank-one symmetric informationally complete POVM (SIC-POVM).
 
     > **savefile:** `bool`
-        -- Whether or not to save all the likelihood functions.  
+        -- Whether or not to save all the likelihood functions.
         If set `True` then two files "Lout.npy" and "xout.npy" will be generated including
-        the likelihood functions and the estimated values in the iterations. If set 
+        the likelihood functions and the estimated values in the iterations. If set
         `False` the likelihood function in the final iteration and the estimated values
-        in all iterations will be saved in "Lout.npy" and "xout.npy". 
+        in all iterations will be saved in "Lout.npy" and "xout.npy".
 
     Returns
     ----------
     **Lout and xout:** `array and float`
         -- The likelihood function and the estimated values in the final iteration.
 
-    **Note:** 
-        SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state 
+    **Note:**
+        SIC-POVM is calculated by the Weyl-Heisenberg covariant SIC-POVM fiducial state
         which can be downloaded from [here](http://www.physics.umb.edu/Research/QBism/
         solutions.html).
     """
@@ -365,24 +377,26 @@ def MLE(x, rho, y, M=[], savefile=False):
             np.save("xout", x_out)
             return L_tp, x_out[-1]
 
+
 def integ(x, p):
     para_num = len(x)
     mean = [0.0 for i in range(para_num)]
     for i in range(para_num):
         p_tp = p
-        if i == para_num-1:
-            for si in range(para_num-1):
-                p_tp = np.trapz(p_tp, x[si],axis=0)
-        
+        if i == para_num - 1:
+            for si in range(para_num - 1):
+                p_tp = np.trapz(p_tp, x[si], axis=0)
+
         elif i == 0:
-            for si in reversed(range(1,para_num)):
+            for si in reversed(range(1, para_num)):
                 p_tp = np.trapz(p_tp, x[si])
         else:
             p_tp = np.trapz(p_tp, x[-1])
-            for si in range(para_num-1):
+            for si in range(para_num - 1):
                 p_tp = np.trapz(p_tp, x[si], axis=0)
-        mean[i] = np.trapz(x[i]*p_tp, x[i])
+        mean[i] = np.trapz(x[i] * p_tp, x[i])
     return mean
+
 
 def BayesCost(x, p, xest, rho, M, W=[], eps=1e-8):
     """
@@ -395,7 +409,7 @@ def BayesCost(x, p, xest, rho, M, W=[], eps=1e-8):
 
     > **p:** `multidimensional array`
         -- The prior distribution.
-        
+
     > **xest:** `list`
         -- The estimators.
 
@@ -404,7 +418,7 @@ def BayesCost(x, p, xest, rho, M, W=[], eps=1e-8):
 
     > **M:** `array`
         -- A set of POVM.
-    
+
     > **W:** `array`
         -- Weight matrix.
 
@@ -425,7 +439,16 @@ def BayesCost(x, p, xest, rho, M, W=[], eps=1e-8):
             if type(M) != list:
                 raise TypeError("Please make sure M is a list!")
         p_num = len(x[0])
-        value = [p[i]*sum([np.trace(np.dot(rho[i], M[mi]))*(x[0][i]-xest[mi][0])**2 for mi in range(len(M))]) for i in range(p_num)]
+        value = [
+            p[i]
+            * sum(
+                [
+                    np.trace(np.dot(rho[i], M[mi])) * (x[0][i] - xest[mi][0]) ** 2
+                    for mi in range(len(M))
+                ]
+            )
+            for i in range(p_num)
+        ]
         C = simps(value, x[0])
         return np.real(C)
     else:
@@ -443,13 +466,13 @@ def BayesCost(x, p, xest, rho, M, W=[], eps=1e-8):
         x_list = []
         for x_ele in x_pro:
             x_list.append([x_ele[i] for i in range(para_num)])
-            
+
         dim = len(rho_list[0])
         p_num = len(p_list)
-        
+
         if W == []:
             W = np.identity(para_num)
-            
+
         if M == []:
             M = SIC(dim)
         else:
@@ -461,14 +484,20 @@ def BayesCost(x, p, xest, rho, M, W=[], eps=1e-8):
             x_tp = np.array(x_list[i])
             xCx = 0.0
             for mi in range(len(M)):
-                xCx += np.trace(np.dot(rho_list[i], M[mi]))*np.dot((x_tp-xest[mi]).reshape(1, -1), np.dot(W, (x_tp-xest[mi]).reshape(-1, 1)))[0][0]
-            value[i] = p_list[i]*xCx
+                xCx += (
+                    np.trace(np.dot(rho_list[i], M[mi]))
+                    * np.dot(
+                        (x_tp - xest[mi]).reshape(1, -1),
+                        np.dot(W, (x_tp - xest[mi]).reshape(-1, 1)),
+                    )[0][0]
+                )
+            value[i] = p_list[i] * xCx
         C = np.array(value).reshape(p_shape)
         for si in reversed(range(para_num)):
             C = simps(C, x[si])
         return np.real(C)
-    
-    
+
+
 def BCB(x, p, rho, W=[], eps=1e-8):
     """
     Calculation of the Bayesian cost bound with a quadratic cost function.
@@ -500,18 +529,20 @@ def BCB(x, p, rho, W=[], eps=1e-8):
         # single-parameter scenario
         dim = len(rho[0])
         p_num = len(x[0])
-        value = [p[i]*x[0][i]**2 for i in range(p_num)]
+        value = [p[i] * x[0][i] ** 2 for i in range(p_num)]
         delta2_x = simps(value, x[0])
         rho_avg = np.zeros((dim, dim), dtype=np.complex128)
         rho_pri = np.zeros((dim, dim), dtype=np.complex128)
         for di in range(dim):
             for dj in range(dim):
-                rho_avg_arr = [p[m]*rho[m][di][dj] for m in range(p_num)]
-                rho_pri_arr = [p[n]*x[0][n]*rho[n][di][dj] for n in range(p_num)]
+                rho_avg_arr = [p[m] * rho[m][di][dj] for m in range(p_num)]
+                rho_pri_arr = [p[n] * x[0][n] * rho[n][di][dj] for n in range(p_num)]
                 rho_avg[di][dj] = simps(rho_avg_arr, x[0])
                 rho_pri[di][dj] = simps(rho_pri_arr, x[0])
         Lambda = Lambda_avg(rho_avg, [rho_pri], eps=eps)
-        minBC = delta2_x-np.real(np.trace(np.dot(np.dot(rho_avg, Lambda[0]), Lambda[0])))
+        minBC = delta2_x - np.real(
+            np.trace(np.dot(np.dot(rho_avg, Lambda[0]), Lambda[0]))
+        )
         return minBC
     else:
         # multi-parameter scenario
@@ -531,15 +562,15 @@ def BCB(x, p, rho, W=[], eps=1e-8):
         x_list = []
         for x_ele in x_pro:
             x_list.append([x_ele[i] for i in range(para_num)])
-        
+
         if W == []:
             W = np.identity(para_num)
-        
+
         value = [0.0 for i in range(p_num)]
         for i in range(p_num):
             x_tp = np.array(x_list[i])
             xCx = np.dot(x_tp.reshape(1, -1), np.dot(W, x_tp.reshape(-1, 1)))[0][0]
-            value[i] = p_list[i]*xCx
+            value[i] = p_list[i] * xCx
         delta2_x = np.array(value).reshape(p_shape)
         for si in reversed(range(para_num)):
             delta2_x = simps(delta2_x, x[si])
@@ -547,14 +578,17 @@ def BCB(x, p, rho, W=[], eps=1e-8):
         rho_pri = [np.zeros((dim, dim), dtype=np.complex128) for i in range(para_num)]
         for di in range(dim):
             for dj in range(dim):
-                rho_avg_arr = [p_list[m]*rho_list[m][di][dj] for m in range(p_num)]
+                rho_avg_arr = [p_list[m] * rho_list[m][di][dj] for m in range(p_num)]
                 rho_avg_tp = np.array(rho_avg_arr).reshape(p_shape)
                 for si in reversed(range(para_num)):
                     rho_avg_tp = simps(rho_avg_tp, x[si])
                 rho_avg[di][dj] = rho_avg_tp
 
                 for para_i in range(para_num):
-                    rho_pri_arr = [p_list[n]*x_list[n][para_i]*rho_list[n][di][dj] for n in range(p_num)]
+                    rho_pri_arr = [
+                        p_list[n] * x_list[n][para_i] * rho_list[n][di][dj]
+                        for n in range(p_num)
+                    ]
                     rho_pri_tp = np.array(rho_pri_arr).reshape(p_shape)
                     for si in reversed(range(para_num)):
                         rho_pri_tp = simps(rho_pri_tp, x[si])
@@ -564,11 +598,12 @@ def BCB(x, p, rho, W=[], eps=1e-8):
         Mat = np.zeros((para_num, para_num), dtype=np.complex128)
         for para_m in range(para_num):
             for para_n in range(para_num):
-                Mat += W[para_m][para_n]*np.dot(Lambda[para_m], Lambda[para_n])
-                
-        minBC = delta2_x-np.real(np.trace(np.dot(rho_avg, Mat)))
+                Mat += W[para_m][para_n] * np.dot(Lambda[para_m], Lambda[para_n])
+
+        minBC = delta2_x - np.real(np.trace(np.dot(rho_avg, Mat)))
         return minBC
-        
+
+
 def Lambda_avg(rho_avg, rho_pri, eps=1e-8):
     para_num = len(rho_pri)
     dim = len(rho_avg)
@@ -576,11 +611,20 @@ def Lambda_avg(rho_avg, rho_pri, eps=1e-8):
     val, vec = np.linalg.eig(rho_avg)
     val = np.real(val)
     for para_i in range(0, para_num):
-        Lambda_eig = np.array([[0.0 + 0.0 * 1.0j for i in range(0, dim)] for i in range(0, dim)])
+        Lambda_eig = np.array(
+            [[0.0 + 0.0 * 1.0j for i in range(0, dim)] for i in range(0, dim)]
+        )
         for fi in range(0, dim):
             for fj in range(0, dim):
                 if np.abs(val[fi] + val[fj]) > eps:
-                    Lambda_eig[fi][fj] = (2* np.dot(vec[:, fi].conj().transpose(),np.dot(rho_pri[para_i], vec[:, fj]))/ (val[fi] + val[fj]))
+                    Lambda_eig[fi][fj] = (
+                        2
+                        * np.dot(
+                            vec[:, fi].conj().transpose(),
+                            np.dot(rho_pri[para_i], vec[:, fj]),
+                        )
+                        / (val[fi] + val[fj])
+                    )
         Lambda_eig[Lambda_eig == np.inf] = 0.0
         Lambda[para_i] = np.dot(vec, np.dot(Lambda_eig, vec.conj().transpose()))
     return Lambda

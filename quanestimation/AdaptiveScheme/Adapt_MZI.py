@@ -17,6 +17,7 @@ class Adapt_MZI:
         -- Initial state (density matrix).
 
     """
+
     def __init__(self, x, p, rho0):
 
         self.x = x
@@ -33,18 +34,16 @@ class Adapt_MZI:
         Parameters
         ----------
         > **target:** `string`
-            -- Setting the target function for calculating the tunable phase. Options are:  
-            "sharpness" (default) -- Sharpness.  
-            "MI" -- Mutual information. 
+            -- Setting the target function for calculating the tunable phase. Options are:
+            "sharpness" (default) -- Sharpness.
+            "MI" -- Mutual information.
 
         > **output:** `string`
-            -- The output the class. Options are:  
-            "phi" (default) -- The tunable phase.  
-            "dphi" -- Phase difference. 
+            -- The output the class. Options are:
+            "phi" (default) -- The tunable phase.
+            "dphi" -- Phase difference.
         """
-        phi = QuanEstimation.adaptMZI_online(
-            self.x, self.p, self.rho0, output, target
-        )
+        phi = QuanEstimation.adaptMZI_online(self.x, self.p, self.rho0, output, target)
 
     def offline(
         self,
@@ -65,13 +64,13 @@ class Adapt_MZI:
         Parameters
         ----------
         > **target:** `string`
-            -- Setting the target function for calculating the tunable phase. Options are:  
-            "sharpness" (default) -- Sharpness.  
-            "MI" -- Mutual information. 
+            -- Setting the target function for calculating the tunable phase. Options are:
+            "sharpness" (default) -- Sharpness.
+            "MI" -- Mutual information.
 
         > **method:** `string`
-            -- The method for the adaptive phase estimation. Options are:  
-            "DE" (default) -- DE algorithm for the adaptive phase estimation.    
+            -- The method for the adaptive phase estimation. Options are:
+            "DE" (default) -- DE algorithm for the adaptive phase estimation.
             "PSO" -- PSO algorithm for the adaptive phase estimation.
 
         If the `method=DE`, the parameters are:
@@ -83,7 +82,7 @@ class Adapt_MZI:
 
         > **max_episode:** `int`
             -- The number of episodes.
-  
+
         > **c:** `float`
             -- Mutation constant.
 
@@ -95,28 +94,28 @@ class Adapt_MZI:
 
         > **eps:** `float`
             -- Machine epsilon.
-        
+
         If the `method=PSO`, the parameters are:
 
         > **deltaphi0:** `list`
             -- Initial guesses of phase difference.
 
         > **max_episode:** `int or list`
-            -- If it is an integer, for example max_episode=1000, it means the 
+            -- If it is an integer, for example max_episode=1000, it means the
             program will continuously run 1000 episodes. However, if it is an
-            array, for example max_episode=[1000,100], the program will run 
-            1000 episodes in total but replace states of all  the particles 
+            array, for example max_episode=[1000,100], the program will run
+            1000 episodes in total but replace states of all  the particles
             with global best every 100 episodes.
-  
+
         > **c0:** `float`
             -- The damping factor that assists convergence, also known as inertia weight.
 
         > **c1:** `float`
-            -- The exploitation weight that attracts the particle to its best previous 
+            -- The exploitation weight that attracts the particle to its best previous
             position, also known as cognitive learning factor.
 
         > **c2:** `float`
-            -- The exploitation weight that attracts the particle to the best position  
+            -- The exploitation weight that attracts the particle to the best position
             in the neighborhood, also known as social learning factor.
 
         > **eps:** `float`
@@ -127,7 +126,7 @@ class Adapt_MZI:
             np.array([int(list(comb_tp[i])[j]) for j in range(self.N)])
             for i in range(2**self.N)
         ]
-        
+
         if method == "DE":
             QuanEstimation.DE_deltaphiOpt(
                 self.x,
