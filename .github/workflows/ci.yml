@@ -15,35 +15,34 @@ jobs:
       PYTHON_JULIACALL_COMPILE: "no"
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.12'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
 
-    - uses: julia-actions/setup-julia@v2
-      with:
-        version: '1.10'
-    - run: julia -v
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: "1.10"
+      - run: julia -v
 
-    - name: Install dependencies
-      run: |
-        pip install .[test]
-        pip install pytest-cov
+      - name: Install dependencies
+        run: |
+          pip install .[test]
+          pip install pytest-cov
 
-    - name: Check env
-      run: env    
+      - name: Check env
+        run: env
 
-    - name: Run tests 
-      run: |
-        export PYTHON_JULIACALL_COMPILE="no"
-        export QuanEstimation_COMPILE="n"
-        coverage run --source=quanestimation -m pytest -s
-        # pytest --cov --cov-branch --cov-report=xml
+      - name: Run tests
+        run: |
+          export PYTHON_JULIACALL_COMPILE="no"
+          export QuanEstimation_COMPILE="n"
+          coverage run --source=quanestimation -m pytest -s
 
-    - name: Upload results to Codecov
-      uses: codecov/codecov-action@v5
-      with:
-        token: ${{ secrets.QUANESTIMATION_TOKEN }}
-        slug: LiuJPhys/QuanEstimation
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.QUANESTIMATION_TOKEN }}
+          slug: QuanEstimation/QuanEstimation
